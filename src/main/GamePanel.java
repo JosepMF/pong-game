@@ -2,6 +2,7 @@ package main;
 
 import entity.Ball;
 import entity.Paddle;
+import entity.Score;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,12 +21,18 @@ public class GamePanel extends JPanel implements Runnable{
     public Paddle paddle1;
     public Paddle paddle2;
 
+    public Score score;
+
     public Ball ball;
 
     public boolean gameOver;
 
+    public int gameScores[] = new int[2];
+
     public GamePanel() {
         gameThread = new Thread(this);
+
+        score = new Score(this);
 
         paddle1 = new Paddle(1, this, keyHandler);
         paddle2 = new Paddle(2, this, keyHandler);
@@ -88,16 +95,24 @@ public class GamePanel extends JPanel implements Runnable{
         checkCollitions();
     }
 
+    private void checkGameOver(Graphics2D g2) {
+        if(gameOver) {
+                ball.x = WIDTH/2-ball.width/2;
+                ball.y = HEIGH/2-ball.height/2;
+                gameOver = false;
+        }
+    }
+
     private void checkCollitions() {
         if(ball.x <= 0) {
             System.out.println("game over");
-            ball.x = WIDTH/2-ball.width/2;
-            ball.y = HEIGH/2-ball.height/2;
+            gameScores[1] += 1;
+            gameOver = true;
         }
         else if(ball.x+ball.width >= this.WIDTH) {
             System.out.println("you won");
-            ball.x = WIDTH/2-ball.width/2;
-            ball.y = HEIGH/2-ball.height/2;
+            gameScores[0] += 1;
+            gameOver = true;
         }
 
         if(ball.x + ball.width < paddle1.width && ball.y > paddle1.y && ball.y < paddle1.y + paddle1.height) {
@@ -127,6 +142,10 @@ public class GamePanel extends JPanel implements Runnable{
 
         paddle1.draw(g2);
         paddle2.draw(g2);
+
+        checkGameOver(g2);
+
+        score.draw(g2, gameScores);
 
         g2.dispose();
     }
