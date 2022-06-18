@@ -22,6 +22,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     public Ball ball;
 
+    public boolean gameOver;
+
     public GamePanel() {
         gameThread = new Thread(this);
 
@@ -86,32 +88,27 @@ public class GamePanel extends JPanel implements Runnable{
         checkCollitions();
     }
 
-    private void stopGame() {
-        // TODO: change this please
-        gameThread.stop();
-    }
-
     private void checkCollitions() {
-        /*if(ball.x <= 0) {
+        if(ball.x <= 0) {
             System.out.println("game over");
-            stopGame();
+            ball.x = WIDTH/2-ball.width/2;
+            ball.y = HEIGH/2-ball.height/2;
         }
         else if(ball.x+ball.width >= this.WIDTH) {
             System.out.println("you won");
-            stopGame();
-        }*/
-
-        if(ball.x+ball.width < paddle1.x+paddle1.width && ball.y > paddle1.y && ball.y < paddle1.height) {
-            System.out.println("paddle1: "+ (ball.x+ball.width > paddle2.x && ball.y > paddle2.y && ball.y < paddle2.height));
-            ball.xDirection = 1;
-            if(ball.yDirection == 1) {
-                ball.yDirection = 0;
-            } else if (ball.yDirection == 0) {
-                ball.yDirection = 1;
-            }
+            ball.x = WIDTH/2-ball.width/2;
+            ball.y = HEIGH/2-ball.height/2;
         }
-        else if(ball.x+ball.width > paddle2.x && ball.y > paddle2.y && ball.y < paddle2.height) {
-            System.out.println("paddle2: "+ (ball.x+ball.width > paddle2.x && ball.y > paddle2.y && ball.y < paddle2.height));
+
+        if(ball.x + ball.width < paddle1.width && ball.y > paddle1.y && ball.y < paddle1.y + paddle1.height) {
+                ball.xDirection = 1;
+                if(ball.yDirection == 1) {
+                    ball.yDirection = 0;
+                } else if (ball.yDirection == 0) {
+                    ball.yDirection = 1;
+                }
+        }
+        else if(ball.x+ball.width >= paddle2.x && ball.y > paddle2.y && ball.y < paddle2.y + paddle2.height) {
             ball.xDirection = 0;
             if(ball.yDirection == 1) {
                 ball.yDirection = 0;

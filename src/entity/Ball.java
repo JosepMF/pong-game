@@ -21,7 +21,7 @@ public class Ball extends Entity{
         this.width = 25;
         this.height = 25;
 
-        this.speed = 2;
+        this.speed = 4;
 
         this.setLocation();
         this.setDirection();
